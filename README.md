@@ -13,7 +13,7 @@
 <<<<<<< HEAD
 - Seasonal trend in the price fluctuations 
 
-![coin-market](https://coinmarketcap.com/)
+[coin-market](https://coinmarketcap.com/)
 =======
 - Seasonal trend in the price fluctuations
 
