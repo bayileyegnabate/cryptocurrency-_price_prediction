@@ -10,4 +10,6 @@
 
 - How does the price fluctuations of currencies correlate with each other?
 
-- Seasonal trend in the price fluctuations
+- Seasonal trend in the price fluctuations 
+
+![coin-market](https://coinmarketcap.com/)
