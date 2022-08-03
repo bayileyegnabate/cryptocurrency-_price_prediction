@@ -3,7 +3,7 @@
 
 Crypto Price Predictions: 
 
-Goal is to be able to put in any crypto currency and predict the price of the currency. 
+Objective:  be able to put in any crypto currency and predict the price of the currency, help traders make informed decisions about crytoprices in the short-term.  
 
 Data is from Kaggle:
 cryptocurrency_price_prediction- 
