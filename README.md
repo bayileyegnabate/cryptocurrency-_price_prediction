@@ -1,19 +1,30 @@
 # Cryptocurrency Price Prediction
 
+## Objective:  
+- Having the ability put in any crypto currency and predict next day price 
+- Assist traders in making an informed decisions about crytoprices in the short-term
 
-Crypto Price Predictions: 
 
-Objective:  be able to put in any crypto currency and predict the price of the currency, help traders make informed decisions about crytoprices in the short-term.  
+## Resources
+**Data Sources:**
+- Kaggle:cryptocurrency_price_prediction
+- Yahoo Finance -(historical data)
 
-Data is from Kaggle:
-cryptocurrency_price_prediction- 
+**Software:**
+- Python
+- SQLite
+- Amazon Web Services: Database
 
-Crypto file has 2013-2018. 
+### Collected Data Info
+Crypto file has 2013-2018
+
 Bitcoin: 4-28-2013 - > 11-29-2018
-Crypto folder: 23 individual crypto currencies.
+
+Crypto folder: 23 individual crypto currencies
+
 Total currencies as of 7/26/22.
 
-Questions:
+## Questions:
 Which cryptocurrency will have top 20 dominance based on machine learning model? 
 - which cryptocurrency will have the largest increase in value?
 - Bitcoin dominance: are there any  coins that are detethered from bitcoin? 
@@ -21,7 +32,7 @@ Which cryptocurrency will have top 20 dominance based on machine learning model?
 
 Random Forest: not deep learning: machine learning: which model would be most effective. 
 
-Amazon Web Services: Database.
+
 
 Unsupervised machine learning: 
 
