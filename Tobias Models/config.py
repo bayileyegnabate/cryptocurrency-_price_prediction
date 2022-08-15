@@ -1,0 +1,1 @@
+aws_password='Mic00k0ut'
