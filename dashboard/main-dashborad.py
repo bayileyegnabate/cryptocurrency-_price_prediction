@@ -1,110 +1,165 @@
-import dash
-from dash import dcc
-from dash import html
-from dash.dependencies import Input, Output
-import plotly.express as px
-import dash_bootstrap_components as dbc
+'''
+The Dash app uses pandas web data reader to get crypto prices 
+from https://finance.yahoo.com/
+
+Data source to be replaced database (AWS)
+'''
+import datetime
 import numpy as np
 import pandas as pd
+import dash
+from dash import Input, Output, dcc, html
+import dash_bootstrap_components as dbc
+import plotly.express as px
 import plotly.graph_objs as go
 import pandas_datareader.data as web
-import datetime
-# 
-from tensorflow import keras
 from sklearn.metrics import mean_squared_error
 from xgboost import XGBRegressor
+from xgbr_predict import predict_nextday_price
 
-#
-start = datetime.datetime(2014,9,17)
-end = datetime.datetime(2022,8,11)
+# Get data
+start = datetime.datetime(2014,9,15)
+end = datetime.date.today()
+tomorrow = end + datetime.timedelta(days=1)
 df = web.DataReader(
-	["BNB-USD", "ETH-USD", "BTC-USD", "AVAX-USD"], 
+	["BNB-USD", "ETH-USD", "BTC-USD", "AVAX-USD", "SOL-USD", "DOGE-USD"], 
 	"yahoo",
 	start=start,
 	end=end
 	)
-# stack
 df = df.stack().reset_index()
-print(df.head())
 
+# ================================================================================
+# Train start dates depend on the coin for they have different histroical profiles.
+# ================================================================================
+train_starts = {
+	"BTC-USD": "2021-06",
+	"ETH-USD": "2021-06",
+	"BNB-USD": "2021-12",
+	"SOL-USD": "2021-12",
+	"AVAX-USD": "2021-12",
+	"DOGE-USD": "2021-09",
+
+}
+
+#===========
+# start Dash
+#===========
 app = dash.Dash(__name__, 
 	external_stylesheets=[dbc.themes.BOOTSTRAP], 
 	meta_tags=[{'name':'viewport', 'content': 'width=device-width, initial-scale=1.0'}],
-	title="cryptocurrency-prices")
+	title="cryptocurrency-prices-prediction")
 
+# ==========
+# components
+# ==========
+# title
+page_title = html.H1("Cryptocurrency Price Prediction", className="pg-title text-center my-1")
+# hr1
+hr1 = html.Hr(className="hr_1 py-3, mb-4")
+# dropdown
+dropdown = dcc.Dropdown(id="select-coin", multi=False, value="BNB-USD",
+				options=[{'label': x, 'value':x} for x in sorted(df["Symbols"].unique())])
+# historical time series graph
+timeseries_graph = dcc.Graph(id="tseries-fig", figure={})
+#button to run next day prediction
+run_button = dbc.Button("Run Modeling", id="run-button", className="btn btn-secondary btn-large mb-4 p-2", value="BNB-USD", disabled=True)
+# display next day predicted price
+next_price = html.Div([
+				html.H4("Tomorow's Prediction:", className="pred-h4"),
+				html.Div(id='price-output', className="price-output",)
+				])
+# prediction against test dataset plot
+pred_graph = dcc.Graph(id="pred-fig", figure={})
+
+
+# ======
+# Layout
+# ======
 app.layout = dbc.Container([
-	# 1st row
 	dbc.Row([
-		dbc.Col(html.H1("Cryptocurrency Price Prediction",
-			className="text-center text-primary my-3"),
+		dbc.Col([
+			page_title,
+			hr1],
 			width=12)
 		]),
-# 2nd row
 	dbc.Row([
-		# first column
 		dbc.Col([
-			dcc.Dropdown(id="my-dropdown", multi=False, value="BNB-USD",
-				options=[{'label': x, 'value':x} for x in sorted(df["Symbols"].unique())]),
-			dcc.Graph(id="line-fig", figure={})
-			], 
-			xs=12,sm=12,md=12,lg=5,xl=5 
+			dropdown,
+			timeseries_graph
+			],xs=12,sm=12,md=12,lg=5,xl=5 
 			),
-		# second column
 		dbc.Col([
-			dbc.Button("Run", color="secondary", id="run-button", className="me-2", n_clicks=0),
-			dcc.Graph(id="line-fig-2", figure={})
-			], #width={'size':5, "order": 2},
-			xs=12,sm=12,md=12,lg=5,xl=5
+			run_button,
+			html.Br(),
+			next_price,
+			pred_graph
+			],xs=12,sm=12,md=12,lg=5,xl=5
 			),
 		],justify="center")
 	])
+# ======= end layout =======
 
-# historical time series plot
+# =========
+# callbacks
+# =========
+# time series plot
 @app.callback(
-	Output("line-fig", "figure"),
-	Input("my-dropdown", "value")
+	Output("tseries-fig", "figure"),
+	Input("select-coin", "value")
 	)
 
 def update_graph(coin_selected):
 	dff = df[df["Symbols"] == coin_selected]
-	figln = px.line(dff, x="Date", y="Close")
+	fig_1 = px.line(dff, x="Date", y="Close", title="Historical Prices")
 
-	return figln
+	return fig_1
 
-# run prediction
+# price prediction
 @app.callback(
-	Output("line-fig-2", "figure"),
-	Input("run-button", "n_clicks")
+	Output("pred-fig", "figure"),
+	Output(component_id='price-output', component_property='children'),
+	Input("select-coin", "value")
 	)
 
 def update_graph(coin_selected):
-	df1 = df[df["Symbols"] == coin_selected]
-	df1.set_index("Date", inplace=True)
-	df1 = df1[["Close"]].copy()
+    df1 = df[df["Symbols"] == coin_selected]
+    df1.set_index("Date", inplace=True)
+    df1 = df1[["Close"]].copy()
+    train_date = train_starts[coin_selected]
+    plot_df, pred_price = predict_nextday_price(df1, train_date, 6)
+    fig_pred = px.line(plot_df, y=["Close", "Pred"], title="Actual vs Predicted",
+    	width=800, height=400
+    	)
 
-	window_size = 3
-	for i in range(1, window_size+1): 
-		df1[f'Close-{i}'] = df1['Close'].shift(i)
+    fig_pred.update_layout(
+    font=dict(
+        family="Open Mono",
+        size=17,
+        color="RebeccaPurple"
+    ),
+    title=dict(
+        text="Actual vs Predicted",
+        x=0.5,
+        y=0.9,
+        xanchor='center',
+        yanchor= 'top',
+        font=dict(
+            family="Open Sans",
+            color="orange",
+            size=27,
+        )
+    ),
+    legend_title="Prices",
+    legend_title_font_color="green"
+    )
+    fig_pred.update_layout(
+    	margin=dict(l=18, r=18, t=18, b=18),
+    	)
 
-	# dropna
-	df1 = df1.dropna()
-	y = df1[["Close"]]
-	X = df1.drop(columns=["Close"])
-	nt = "2021-12"
-	X_train = X.loc[:nt]
-	y_train = y.loc[:nt]
-	X_test = X.loc[nt:]
-	y_test = y.loc[nt:]
-	model = XGBRegressor(n_estimators=1000, objectives="reg:mean_squared_error", learning_rate=0.01)
-	model.fit(X_train, y_train)
-	pred = model.predict(X_test)
-	plot_df = pd.DataFrame(y_test)
-	plot_df["Pred"] = pred
-	plot_df.index = y_test.index
-	figln2 = px.line(plot_df, y=["Close"])
+    return fig_pred, f"${pred_price:.0f}"
+# ======= end layout ====================
 
-	return figln2
-
-#  
-# # if __name__ == '__main__':
-app.run_server(debug=True, port=3000)
+# main
+if __name__ == '__main__':
+	app.run_server(debug=True, port=3000)

@@ -1,0 +1,18 @@
+body {
+	font-family: "Open Sans", sans-serif;
+	line-height: 1.7;
+}
+.pg-title {
+	color:  brown;
+}
+.price-output {
+	display: inline-block;
+	border: 1px solid slategrey;
+	padding: 0.5rem;
+	font-size: 2rem;
+	color:  red;
+	margin-left: 5rem;
+}
+.pred-h4 {
+	color:  slategrey;
+}
