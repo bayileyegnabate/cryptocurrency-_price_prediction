@@ -71,6 +71,11 @@ next_price = html.Div([
 				])
 # prediction against test dataset plot
 pred_graph = dcc.Graph(id="pred-fig", figure={})
+# weekly volatility
+weekly_volatility = html.Div([
+	html.H3("Weekly Volatility"),
+	dcc.Graph(id="volatility", figure={})
+	])
 
 
 # ======
@@ -96,7 +101,10 @@ app.layout = dbc.Container([
 			pred_graph
 			],xs=12,sm=12,md=12,lg=5,xl=5
 			),
-		],justify="center")
+		],justify="center"),
+	dbc.Row([
+		weekly_volatility
+		])
 	])
 # ======= end layout =======
 
@@ -111,7 +119,9 @@ app.layout = dbc.Container([
 
 def update_graph(coin_selected):
 	dff = df[df["Symbols"] == coin_selected]
-	fig_1 = px.line(dff, x="Date", y="Close", title="Historical Prices")
+	fig_1 = px.line(dff, x="Date", y="Close", title="Historical Prices",
+    	labels={"Date": "", "Close": "Coin Value (USD)"}
+		)
 
 	return fig_1
 
@@ -160,6 +170,24 @@ def update_graph(coin_selected):
     fig_pred.update_xaxes(tickangle=-45)
 
     return fig_pred, f"${pred_price:.2f}"
+
+# seven day volatility
+@app.callback(
+	Output("volatility", "figure"),
+	Input("select-coin", "value")
+	)
+def update_volatility(coin_selected):
+	dff = df[df["Symbols"] == coin_selected]
+	dff["weekly_volt"] = dff["Close"].pct_change().rolling(7).std()
+	fig_volt = px.line(dff,
+		x="Date", 
+		y="weekly_volt", 
+		title="Weekly Close Price Volatility",
+		labels={"Date":"", "weekly_volt":"Volatility"}
+		)
+	fig_volt.update_xaxes(tickangle=-45)
+
+	return fig_volt
 # ======= end layout ====================
 
 # main
