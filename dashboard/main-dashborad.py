@@ -63,7 +63,7 @@ dropdown = dcc.Dropdown(id="select-coin", multi=False, value="BNB-USD",
 # historical time series graph
 timeseries_graph = dcc.Graph(id="tseries-fig", figure={})
 #button to run next day prediction
-run_button = dbc.Button("Run Modeling", id="run-button", className="btn btn-secondary btn-large mb-4 p-2", value="BNB-USD", disabled=True)
+run_button = html.Button("Run Modeling", id="run-button", className="btn btn-secondary btn-large mb-4 p-2", value="BNB-USD", disabled=True)
 # display next day predicted price
 next_price = html.Div([
 				html.H4("Tomorow's Prediction:", className="pred-h4"),
@@ -129,13 +129,13 @@ def update_graph(coin_selected):
     train_date = train_starts[coin_selected]
     plot_df, pred_price = predict_nextday_price(df1, train_date, 6)
     fig_pred = px.line(plot_df, y=["Close", "Pred"], title="Actual vs Predicted",
-    	width=800, height=400
+    	width=700, height=400
     	)
 
     fig_pred.update_layout(
     font=dict(
-        family="Open Mono",
-        size=17,
+        family="Open Sans",
+        size=13,
         color="RebeccaPurple"
     ),
     title=dict(
@@ -146,8 +146,8 @@ def update_graph(coin_selected):
         yanchor= 'top',
         font=dict(
             family="Open Sans",
-            color="orange",
-            size=27,
+            color="grey",
+            size=22,
         )
     ),
     legend_title="Prices",
@@ -156,8 +156,9 @@ def update_graph(coin_selected):
     fig_pred.update_layout(
     	margin=dict(l=18, r=18, t=18, b=18),
     	)
+    fig_pred.update_xaxes(tickangle=-45)
 
-    return fig_pred, f"${pred_price:.0f}"
+    return fig_pred, f"${pred_price:.2f}"
 # ======= end layout ====================
 
 # main

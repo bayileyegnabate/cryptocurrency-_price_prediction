@@ -3,15 +3,16 @@ body {
 	line-height: 1.7;
 }
 .pg-title {
-	color:  brown;
+	color:  #EB5A3C;
 }
 .price-output {
 	display: inline-block;
-	border: 1px solid slategrey;
+	background-color: #A7A5A9;
 	padding: 0.5rem;
-	font-size: 2rem;
-	color:  red;
+	font-size: 1.7rem;
+	color: #fff;
 	margin-left: 5rem;
+	border-radius: 0.3rem;
 }
 .pred-h4 {
 	color:  slategrey;
