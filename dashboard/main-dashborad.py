@@ -129,7 +129,8 @@ def update_graph(coin_selected):
     train_date = train_starts[coin_selected]
     plot_df, pred_price = predict_nextday_price(df1, train_date, 6)
     fig_pred = px.line(plot_df, y=["Close", "Pred"], title="Actual vs Predicted",
-    	width=700, height=400
+    	width=700, height=400,
+    	labels={"value": "Coin Value (USD)", "Date": ""}
     	)
 
     fig_pred.update_layout(
