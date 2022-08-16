@@ -66,7 +66,7 @@ timeseries_graph = dcc.Graph(id="tseries-fig", figure={})
 run_button = html.Button("Run Modeling", id="run-button", className="btn btn-secondary btn-large mb-4 p-2", value="BNB-USD", disabled=True)
 # display next day predicted price
 next_price = html.Div([
-				html.H4("Tomorow's Prediction:", className="pred-h4"),
+				html.H4("Tomorrow's Prediction:", className="pred-h4"),
 				html.Div(id='price-output', className="price-output",)
 				])
 # prediction against test dataset plot
