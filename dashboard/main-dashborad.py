@@ -49,6 +49,8 @@ app = dash.Dash(__name__,
 	external_stylesheets=[dbc.themes.BOOTSTRAP], 
 	meta_tags=[{'name':'viewport', 'content': 'width=device-width, initial-scale=1.0'}],
 	title="cryptocurrency-prices-prediction")
+server = app.server
+
 
 # ==========
 # components
@@ -192,4 +194,4 @@ def update_volatility(coin_selected):
 
 # main
 if __name__ == '__main__':
-	app.run_server(debug=True, port=3000)
+	app.run_server(debug=True)
