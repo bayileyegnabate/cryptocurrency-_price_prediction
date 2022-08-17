@@ -57,6 +57,8 @@ server = app.server
 # ==========
 # title
 page_title = html.H1("Cryptocurrency Price Prediction", className="pg-title text-center my-1")
+# hero text
+hero_text = html.P("Using Machine Learning to Predict Next Day Crypto Prices", className="hero-text text-center py-3")
 # hr1
 hr1 = html.Hr(className="hr_1 py-3, mb-4")
 # dropdown
@@ -87,6 +89,7 @@ app.layout = dbc.Container([
 	dbc.Row([
 		dbc.Col([
 			page_title,
+			hero_text,
 			hr1],
 			width=12)
 		]),
@@ -194,4 +197,4 @@ def update_volatility(coin_selected):
 
 # main
 if __name__ == '__main__':
-	app.run_server(debug=True)
+	app.run_server(debug=True, port=3000)

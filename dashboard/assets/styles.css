@@ -1,19 +1,31 @@
 body {
 	font-family: "Open Sans", sans-serif;
 	line-height: 1.7;
+	/*background-color: #f5f5f5;*/
 }
 .pg-title {
-	color:  #EB5A3C;
+	/*background: rgba(72, 155, 249, 0.9);*/
+	color: #0062b5;
 }
 .price-output {
 	display: inline-block;
-	background-color: #A7A5A9;
+	background-color: #b57700;
 	padding: 0.5rem;
-	font-size: 1.7rem;
-	color: #fff;
+	font-size: 1.5rem;
+	color:  #fff;
 	margin-left: 5rem;
-	border-radius: 0.3rem;
+	/*width: content;*/
 }
 .pred-h4 {
-	color:  slategrey;
+	color:  orange;
+}
+.select-coin {
+	margin-bottom: 0;
+	font-size:  1.1rem;
+	color: #b57700;
+}
+.hero-text {
+	font-size:  1.1rem;
+	color: grey;
+
 }
