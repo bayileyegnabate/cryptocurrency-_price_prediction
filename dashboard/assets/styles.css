@@ -1,31 +1,60 @@
-body {
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+:root {
+	--primary-bg-color: #6F96F3;
+	--light-font-color: #fff;
+	--dark-font-color: #070202;
+	--bright-font-color: #814FD1;
+	--border-color: rgba(129, 79, 209, 0.2);
+	--bright-bg-color:  #F9676D;
+	--primary-font-color: #814FE5;
+}
+
+* {
 	font-family: "Open Sans", sans-serif;
-	line-height: 1.7;
-	/*background-color: #f5f5f5;*/
 }
-.pg-title {
-	/*background: rgba(72, 155, 249, 0.9);*/
-	color: #0062b5;
+
+/*header*/
+.main-header {
+	/*background: var(--primary-bg-color);*/
+	/*color:  var(--bright-font-color);*/
+	/*box-shadow: 3px 3px red, -1em 0 .4em olive;*/
+	/* offset-x | offset-y | blur-radius | spread-radius | color */
+	box-shadow: 0 3px 3px 1px var(--border-color);
 }
-.price-output {
-	display: inline-block;
-	background-color: #b57700;
-	padding: 0.5rem;
-	font-size: 1.5rem;
-	color:  #fff;
-	margin-left: 5rem;
-	/*width: content;*/
+.app-title {
+	font-weight: 500;
+	letter-spacing: 1px;
+	color:  var(--bright-font-color);
 }
-.pred-h4 {
-	color:  orange;
+.lead-text {
+	color:  var(--dark-font-color);
 }
-.select-coin {
-	margin-bottom: 0;
-	font-size:  1.1rem;
-	color: #b57700;
+
+/*model info*/
+.model-info {
+	border: 1px solid var(--border-color);
 }
-.hero-text {
-	font-size:  1.1rem;
-	color: grey;
+.model-info-item {
+	border: 1px solid var(--border-color);
+}
+
+/*volatility graph*/
+.volt-div {
+	border: 1px solid var(--border-color);
+	height: 200px;
+}
+
+/*page cntainer*/
+.page-container {
+	/*background: green;*/
+}
+
+/*predicted price*/
+.nextday-price {
+	display:  inline-block;
+	border: 1px solid var(--border-color);
+	font-size: 1.7rem;
+	border-radius: .2rem;
+	color: var(--primary-font-color);
 
 }
