@@ -22,7 +22,7 @@ start = datetime.datetime(2014,9,15)
 end = datetime.date.today()
 tomorrow = end + datetime.timedelta(days=1)
 df = web.DataReader(
-	["BNB-USD", "ETH-USD", "BTC-USD", "AVAX-USD", "SOL-USD", "DOGE-USD"], 
+	["BCH-USD", "BNB-USD", "ETH-USD", "BTC-USD", "AVAX-USD", "SOL-USD", "DOGE-USD"], 
 	"yahoo",
 	start=start,
 	end=end
@@ -39,7 +39,7 @@ train_starts = {
 	"SOL-USD": "2021-12",
 	"AVAX-USD": "2021-12",
 	"DOGE-USD": "2021-09",
-
+	"BCH-USD": "2021-07",
 }
 
 #===========
@@ -62,12 +62,12 @@ hero_text = html.P("Using Machine Learning to Predict Next Day Crypto Prices", c
 # hr1
 hr1 = html.Hr(className="hr_1 py-3, mb-4")
 # dropdown
-dropdown = dcc.Dropdown(id="select-coin", multi=False, value="BNB-USD",
+dropdown = dcc.Dropdown(id="select-coin", multi=False, value="BCH-USD",
 				options=[{'label': x, 'value':x} for x in sorted(df["Symbols"].unique())])
 # historical time series graph
 timeseries_graph = dcc.Graph(id="tseries-fig", figure={})
 #button to run next day prediction
-run_button = html.Button("Run Modeling", id="run-button", className="btn btn-secondary btn-large mb-4 p-2", value="BNB-USD", disabled=True)
+run_button = html.Button("Run Modeling", id="run-button", className="btn btn-secondary btn-large mb-4 p-2", value="BCH-USD", disabled=True)
 # display next day predicted price
 next_price = html.Div([
 				html.H4("Tomorrow's Prediction:", className="pred-h4"),
@@ -174,7 +174,7 @@ def update_graph(coin_selected):
     	)
     fig_pred.update_xaxes(tickangle=-45)
 
-    return fig_pred, f"${pred_price:.2f}"
+    return fig_pred, f"{tomorrow}: ${pred_price:.2f}"
 
 # seven day volatility
 @app.callback(
