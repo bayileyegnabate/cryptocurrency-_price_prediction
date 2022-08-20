@@ -10,7 +10,7 @@ import plotly.graph_objs as go
 import pandas_datareader.data as web
 from sklearn.metrics import mean_squared_error
 from xgboost import XGBRegressor
-from xgbr_predict import predict_nextday_price
+from .models import xgbr_predict
 
 # Get data
 start = datetime.datetime(2014,9,15)
@@ -183,7 +183,7 @@ def update_nextday_price(coin_selected):
     df1.set_index("Date", inplace=True)
     df1 = df1[["Close"]].copy()
     train_date = train_starts[coin_selected]
-    plot_df, pred_price = predict_nextday_price(df1, train_date, 6)
+    plot_df, pred_price = xgbr_predict(df1, train_date, 6)
     fig_pred = px.line(plot_df, y=["Close", "Pred"], title="Actual vs Predicted",
         width=600, height=400,
         labels={"Date": "", "value": "Coin Value (USD)"}

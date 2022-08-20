@@ -2,7 +2,7 @@ import pandas as pd
 from xgboost import XGBRegressor
 
 # create function to use XGBRegressor for next day prediction
-def predict_nextday_price(data_df, train_start_date, window_size=6):
+def xgbr_predict(data_df, train_start_date, window_size=6):
     """This module will use the Closing priice of a cryptocurrency 
     to predict the next day price using XGBRegressor.
 
