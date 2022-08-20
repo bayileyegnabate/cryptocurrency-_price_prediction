@@ -1,5 +1,11 @@
+import datetime
 import pandas as pd
 from xgboost import XGBRegressor
+
+#
+today = datetime.date.today()
+tomorrow = today + datetime.timedelta(days=1)
+
 
 # create function to use XGBRegressor for next day prediction
 def xgbr_predict(data_df, train_start_date, window_size=6):
@@ -34,7 +40,11 @@ def xgbr_predict(data_df, train_start_date, window_size=6):
     y_test = y.loc[n:]
 
     # train and fit model
-    model = XGBRegressor(n_estimators=1000,learning_rate=0.01)
+    model = XGBRegressor(
+        objective="reg:squarederror", 
+        n_estimators=1000, 
+        learning_rate=0.01)
+
     model.fit(X_train, y_train)
     # predict
     pred = model.predict(X_test)
@@ -43,5 +53,8 @@ def xgbr_predict(data_df, train_start_date, window_size=6):
     plot_df["Pred"] = pred
     plot_df.index = y_test.index
 
+    # test0 = test.loc["2022-08-08"]
+
     # return plot_df and the last predicted value, pred[-1]
     return plot_df, pred[-1]
+
