@@ -10,7 +10,7 @@ import plotly.graph_objs as go
 import pandas_datareader.data as web
 from sklearn.metrics import mean_squared_error
 from xgboost import XGBRegressor
-from models import xgbr_predict
+from .models import xgbr_predict
 
 # Get data
 start = datetime.datetime(2014,9,15)
