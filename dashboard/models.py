@@ -2,6 +2,8 @@ import datetime
 import pandas as pd
 from xgboost import XGBRegressor
 
+XGBR_N_ESTIMATORS = 2
+LEARNING_RATE = 0.1
 #
 today = datetime.date.today()
 tomorrow = today + datetime.timedelta(days=1)
@@ -42,8 +44,8 @@ def xgbr_predict(data_df, train_start_date, window_size=6):
     # train and fit model
     model = XGBRegressor(
         objective="reg:squarederror", 
-        n_estimators=1000, 
-        learning_rate=0.01)
+        n_estimators=XGBR_N_ESTIMATORS, 
+        learning_rate=LEARNING_RATE)
 
     model.fit(X_train, y_train)
     # predict
