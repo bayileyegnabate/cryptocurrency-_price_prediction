@@ -1,6 +1,8 @@
 import pandas as pd
 import xgboost as xgb
 
+XGBR_N_ESTIMATORS = 200
+LEARNING_RATE = 0.1
 # nextday price prediction function
 # =================================
 def xgb_price_predictor(data, training_end_date, window_size):
@@ -13,8 +15,8 @@ def xgb_price_predictor(data, training_end_date, window_size):
     
     # train model
     model = xgb.XGBRegressor(objective="reg:squarederror",
-                         n_estimators=300,
-                         learning_rate=0.01,
+                         n_estimators=XGBR_N_ESTIMATORS,
+                         learning_rate=LEARNING_RATE,
                          random_state=1,
                          # early_stoping_rounds=50
                         )
