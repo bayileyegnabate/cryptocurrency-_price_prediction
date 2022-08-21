@@ -13,7 +13,7 @@ def xgb_price_predictor(data, training_end_date, window_size):
     
     # train model
     model = xgb.XGBRegressor(objective="reg:squarederror",
-                         n_estimators=700,
+                         n_estimators=400,
                          learning_rate=0.01,
                          random_state=1,
                          # early_stoping_rounds=50
