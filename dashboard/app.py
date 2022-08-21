@@ -45,7 +45,8 @@ train_starts = {
 app = dash.Dash(__name__, 
     external_stylesheets=[dbc.themes.BOOTSTRAP], 
     meta_tags=[{'name':'viewport', 'content': 'width=device-width, initial-scale=1.0'}],
-    title="dash-app-layout")
+    title="crypto-price-prediction-ml")
+server = app.server
 
 # components
 # ==========
