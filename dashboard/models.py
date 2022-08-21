@@ -1,7 +1,7 @@
 import pandas as pd
 import xgboost as xgb
 
-XGBR_N_ESTIMATORS = 200
+XGBR_N_ESTIMATORS = 100
 LEARNING_RATE = 0.1
 # nextday price prediction function
 # =================================
