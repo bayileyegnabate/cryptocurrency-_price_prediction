@@ -10,8 +10,8 @@ import plotly.graph_objs as go
 import pandas_datareader.data as web
 from sklearn.metrics import mean_squared_error
 import xgboost as xgb
-# from .models import xgbr_predict
-from xgb_model import xgb_price_predictor
+from .models import xgbr_predict
+#from xgb_model import xgb_price_predictor
 
 # Get data
 start = datetime.datetime(2014,9,15)
