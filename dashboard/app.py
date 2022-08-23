@@ -49,6 +49,7 @@ app = dash.Dash(__name__,
     external_stylesheets=[dbc.themes.MATERIA], 
     meta_tags=[{'name':'viewport', 'content': 'width=device-width, initial-scale=1.0'}],
     title="local-cryptocurrency-price-prediction-machine-learning")
+server = app.server
 
 # layout
 app.layout = dbc.Container([
