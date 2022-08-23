@@ -12,7 +12,7 @@ import pandas_datareader.data as web
 from sklearn.metrics import mean_squared_error
 import xgboost as xgb
 # from xgb_model import xgb_price_predictor, xgb_prediction_on_test
-from xgb_model import xgb_prediction_on_test
+from .xgb_model import xgb_prediction_on_test
 
 # CONSTANTS
 WINDOW_SIZE = 2

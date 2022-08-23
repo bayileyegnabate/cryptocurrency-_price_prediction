@@ -7,6 +7,8 @@
 	--border-color: rgba(129, 79, 209, 0.2);
 	--bright-bg-color:  #F9676D;
 	--primary-font-color: #814FE5;
+	--light-grey:  #ACB5B9;
+	/*--primary-border-color:  background: linear-gradient(#e66465, #9198e5);*/
 }
 
 * {
@@ -15,11 +17,9 @@
 
 /*header*/
 .main-header {
-	/*background: var(--primary-bg-color);*/
-	/*color:  var(--bright-font-color);*/
-	/*box-shadow: 3px 3px red, -1em 0 .4em olive;*/
-	/* offset-x | offset-y | blur-radius | spread-radius | color */
-	box-shadow: 0 3px 3px 1px var(--border-color);
+	box-shadow: 0 3px 4px 2px var(--border-color);
+	/*background: linear-gradient(#814FE5, #9198e5);*/
+	/*border-bottom: 1px solid blue;*/
 }
 .app-title {
 	font-weight: 500;
@@ -46,7 +46,7 @@
 
 /*page cntainer*/
 .page-container {
-	/*background: green;*/
+
 }
 
 /*predicted price*/
@@ -57,4 +57,16 @@
 	border-radius: .2rem;
 	color: var(--primary-font-color);
 
+}
+.div1, .div2, .run-btn {
+	border: 2px solid #8151E8;
+}
+.run-btn {
+	border: linear-gradient(#814FE5, #9198e5);
+}
+
+.run-btn:hover {
+	background-color: #8151E8;
+	color: #fff;
+	/*border: none;*/
 }
