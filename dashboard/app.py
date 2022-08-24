@@ -13,6 +13,10 @@ from sklearn.metrics import mean_squared_error
 import xgboost as xgb
 # from xgb_model import xgb_price_predictor, xgb_prediction_on_test
 from .xgb_model import xgb_prediction_on_test
+## Diskcache
+import diskcache
+cache = diskcache.Cache("./cache")
+long_callback_manager = DiskcacheLongCallbackManager(cache)
 
 # CONSTANTS
 WINDOW_SIZE = 2
@@ -102,12 +106,13 @@ app.layout = dbc.Container([
 # =========
 
 # time series
-@app.callback(
+@app.long_callback(
     Output("tseries-fig", "figure"),
     Output("nextday-price-prediction", "children"),
     Output("pred-fig", "figure"),
     Input("btn-nclicks-1", "n_clicks"),
-    Input("select-coin", "value")
+    Input("select-coin", "value"),
+    manager=long_callback_manager,
     )
 def update_timeseries_graph(runpred, coin_selected):
     dff = df[df["Symbols"] == coin_selected]
