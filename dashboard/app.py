@@ -22,7 +22,7 @@ start = datetime.datetime(2014,9,15)
 end = datetime.date.today()
 tomorrow = end + datetime.timedelta(days=1)
 df = web.DataReader(
-    ["BCH-USD","BNB-USD", "ETH-USD", "BTC-USD", "AVAX-USD", "SOL-USD", "DOGE-USD"], 
+    ["BCH-USD","BNB-USD", "ETH-USD", "ADA-USD", "XRP-USD", "ETC-USD", "BTC-USD", "KYL-USD", "AVAX-USD", "SOL-USD", "DOGE-USD"], 
     "yahoo",
     start=start,
     end=end
@@ -39,6 +39,11 @@ train_end_dates = {
     "SOL-USD": "2021-12",
     "AVAX-USD": "2021-12",
     "DOGE-USD": "2021-09",
+    "ADA-USD": "2021-09",
+    "XRP-USD": "2021-09",
+    "ETC-USD": "2021-09",
+    "BTC-USD": "2021-09",
+    "KYL-USD": "2021-11",
 }
 
 #===========
