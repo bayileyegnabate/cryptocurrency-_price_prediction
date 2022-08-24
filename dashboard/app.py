@@ -5,6 +5,7 @@ import pandas as pd
 import dash
 from dash import Input, Output, dcc, html, ctx
 import dash_bootstrap_components as dbc
+from dash.long_callback import DiskcacheLongCallbackManager
 import plotly.io as pio
 import plotly.express as px
 import plotly.graph_objs as go
