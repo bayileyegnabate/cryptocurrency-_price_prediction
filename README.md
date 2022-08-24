@@ -15,54 +15,31 @@
 - SQLite
 - Amazon Web Services: Database
 
-### Collected Data Info
-Crypto file has 2013-2018
+## Overview:
+As a team of four, we decided to choose 11 coins to predict next day price. The data from Yahoo Finance was parsed in jupyter notebook to show the date, closing price, volume, and ticker. See image below:
 
-Bitcoin: 4-28-2013 - > 11-29-2018
-
-Crypto folder: 23 individual crypto currencies
-
-Total currencies as of 7/26/22.
-
-## Questions:
-Which cryptocurrency will have top 20 dominance based on machine learning model? 
-- which cryptocurrency will have the largest increase in value?
-- Bitcoin dominance: are there any  coins that are detethered from bitcoin? 
-- Comparison to traditional markets? S&P 500 or some other index. 
-
-Random Forest: not deep learning: machine learning: which model would be most effective. 
+<img width="335" alt="data_gathering" src="https://user-images.githubusercontent.com/100165760/186288464-55ff5d6c-8c7c-45b8-b225-b9c6a90960dd.png">
 
 
+We worked with two different machine learning models (lstm and xgboost) to decifer which model would best demostrate the next day coin price accurately.
 
-Unsupervised machine learning: 
+## Results:
 
-Work on cleaning the data. 
-Writing down why things are being excluded: 
-Any kind of prediction. 
+### LSTM
+The model was trained to use the previous 5 days of data to predict what the coin price would be for the next day. 
+Each coin dataframe was plotted on a graph: 
 
-A bunch of time series data: prediction model would probably be best. 
+<img width="402" alt="plot_graph_avax" src="https://user-images.githubusercontent.com/100165760/186289665-5eaa3213-2222-4f07-8cae-36dcbfdda0f5.png">
 
-When we do predictions, how do we do this: 
-If we stick to prediction: limited: because haven’t been trading for too long: can predict 1 week out of 2 days out, with some accuracy: limited how out you can make predictions: 
-Show accuracy for the price, a couple days out. 
+
+
+After the coin was split, trained, tested, scaled, and reshaped, the model was built.
+
+<img width="402" alt="model_prediction" src="https://user-images.githubusercontent.com/100165760/186290032-02fa774c-c850-46bc-8e03-ea49f73dbf3a.png">
+
+### XGBOOST
 
 
 
 
-Build an app to help traders determine what will happen today or tomorrow, based on the data. 
 
-Drop down menu, prediction for a given coin, 
-dashboard: 
-
-Data we need to extract
-
-Symbol
-last_updated
-data_Added
-Circulating supply /total supply
-cmc_rank
-Quote: USD(PRICE)
-Quote: volume_24h/ volume-change-24
-Percentage 24hrs
-Percentage 7days
-Market cap
