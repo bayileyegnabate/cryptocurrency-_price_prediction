@@ -5,23 +5,20 @@ import pandas as pd
 import dash
 from dash import Input, Output, dcc, html, ctx
 import dash_bootstrap_components as dbc
-from dash.long_callback import DiskcacheLongCallbackManager
 import plotly.io as pio
 import plotly.express as px
 import plotly.graph_objs as go
 import pandas_datareader.data as web
 from sklearn.metrics import mean_squared_error
 import xgboost as xgb
-# from xgb_model import xgb_price_predictor, xgb_prediction_on_test
-from .xgb_model import xgb_prediction_on_test
-## Diskcache
+from xgb_model import xgb_train_model, xgb_prediction_on_test
+from dash.long_callback import DiskcacheLongCallbackManager
 import diskcache
 cache = diskcache.Cache("./cache")
 long_callback_manager = DiskcacheLongCallbackManager(cache)
 
 # CONSTANTS
 WINDOW_SIZE = 2
-
 # Get data
 start = datetime.datetime(2014,9,15)
 end = datetime.date.today()
@@ -33,10 +30,10 @@ df = web.DataReader(
     end=end
     )
 df = df.stack().reset_index()
-# ================================================================================
-# Train start dates depend on the coin for they have different histroical profiles.
-# ================================================================================
-train_end_dates = {
+# ================================================
+# Test start dates for model perfrmance avaluation
+# ================================================
+test_start_dates = {
     "BCH-USD": "2021-05",
     "BTC-USD": "2021-06",
     "ETH-USD": "2021-06",
@@ -55,47 +52,46 @@ train_end_dates = {
 # start Dash
 #===========
 app = dash.Dash(__name__, 
-    # external_stylesheets=[dbc.themes.BOOTSTRAP], 
-    external_stylesheets=[dbc.themes.MATERIA], 
+    external_stylesheets=[dbc.themes.BOOTSTRAP], 
     meta_tags=[{'name':'viewport', 'content': 'width=device-width, initial-scale=1.0'}],
-    title="local-cryptocurrency-price-prediction-machine-learning")
+    title="cryptocurrency-price-prediction-machine-learning")
 server = app.server
 
-# layout
+# ==========
+# app layout
+# ==========
 app.layout = dbc.Container([
     dbc.Row([
         html.Div([
-            html.H1("Cryptocurrency Price Prediction", className="app-title pb-3"),
-            html.P("Using Machine Learning to Predict Next Day Price", className="lead_text")
-            ], className="main-header mb-4 py-3 text-center")]),
+            html.H1("Cryptocurrency Price Predictor", className="app-title py-3"),
+            html.P("Get ahead of the industry by predicting the Next Day Close Price for your most bullish cryptocurrencies", className="lead-text"),
+            html.Hr(),
+            html.Br()
+            ], className="main-header mb-4 py-3")]),
     dbc.Row([
         # select coin
         dbc.Col([
-            dcc.Dropdown(id="select-coin", multi=False, value="BCH-USD",
-                options=[{'label': x, 'value':x} for x in sorted(df["Symbols"].unique())]),
-            dbc.Button("Run Prediction", 
+            dbc.Row([
+                dbc.InputGroup([
+                    html.H5("Select Cryptocurrency: ", className="text-primary mb-2"),
+                    dcc.Dropdown(id="select-coin", multi=False, value="BCH-USD",
+                        options=[{'label': x, 'value':x} for x in sorted(df["Symbols"].unique())],className="dropdown")], className="inputgroup mb-5")
+                ]),
+            dbc.Row([
+                html.Div([
+                    html.H4("Model Performance")
+                    ], className="model-performance mb-3 mt-5")
+                ]),
+            dcc.Graph(id="pred-fig", figure={}),
+            dbc.Button("Tomorrow's Prediction", 
                 id="btn-nclicks-1", 
                 n_clicks=0, outline=True,
-                className="run-btn me-1 mt-5"),
-            html.Div(id="nextday-price-prediction", className="nextday-price mt-5"),
-            dcc.Graph(id="pred-fig", figure={}),
-            # model info
-            dbc.Row([
-                dbc.Col([
-                    html.Div([
-                    html.H5("96.8%"),
-                    html.P("Model Training Accuracy")],className="model-info-item py-2")
-                    ]),
-                dbc.Col([
-                    html.Div([
-                    html.H5("91.3%"),
-                    html.P("Model Test Accuracy")],className="model-info-item py-2")
-                    ])
-                ], className="model-info mt-5")
-            ]),
+                className="run-btn me-1 my-4"),
+            html.Div(id="nextday-price-prediction", className="nextday-price mt-1"),
+            ], className="first-col"),
         # time series and weekly volatility plots
         dbc.Col([
-            dcc.Graph(id="tseries-fig", figure={}),
+            dcc.Graph(id="tseries-fig", figure={}, className="mb-3"),
             dcc.Graph(id="volatility-fig", figure={}),
             ])
         ]),
@@ -105,101 +101,75 @@ app.layout = dbc.Container([
 # =========
 # callbacks
 # =========
-
-# time series
-@app.long_callback(
+@app.callback(
     Output("tseries-fig", "figure"),
     Output("nextday-price-prediction", "children"),
     Output("pred-fig", "figure"),
+    Output("volatility-fig", "figure"),
     Input("btn-nclicks-1", "n_clicks"),
-    Input("select-coin", "value"),
-    manager=long_callback_manager,
+    Input("select-coin", "value")
     )
-def update_timeseries_graph(runpred, coin_selected):
+def update_graphs_prediction(runpred, coin_selected):
     dff = df[df["Symbols"] == coin_selected]
     # simple moving average using pandas rolling window
     dff["SMA_6Month"] = dff["Close"].rolling(window=180).mean()
     # cumulative moving average
     dff["CMA"] = dff["Close"].expanding(min_periods=3).mean()
-    ts_fig = px.line(dff, x="Date", y=["Close", "SMA_6Month", "CMA"], labels={"Date": "", "Value": "Price (USD)"})
+    ts_fig = px.line(dff, x="Date", y=["Close", "SMA_6Month", "CMA"], title="Time Series", labels={"value": "Price (USD)"})
+    # weekly volatility
+    dff["Weekly_Voltaility"] = dff["Close"].pct_change().rolling(7).std()
+    wv_fig = px.line(dff, x="Date", y="Weekly_Voltaility", title="Weekly Voltaility", labels={"Weekly_Voltaility": "Weekly Voltaility"})
 
-    # df1 = df[df["Symbols"] == coin_selected]
-    
-    # initialize nextday Close price
+    # nextday Close price
     nextday_price = ""
 
-    train_end_date = train_end_dates[coin_selected]
+    test_start_date = test_start_dates[coin_selected]
     dff.set_index("Date", inplace=True)
     dff = dff[["Close"]].copy()
 
     coin_saved_model = f"static/{coin_selected}.json"
 
-    plot_df, y_nextday = xgb_prediction_on_test(dff, coin_saved_model, train_end_date, WINDOW_SIZE)
-    pred_test_fig = px.line(plot_df, y=["Close", "Prediction"], title="Actual vs Prediction")
+    plot_df, y_nextday = xgb_prediction_on_test(dff, coin_saved_model, test_start_date, WINDOW_SIZE)
+    pred_test_fig = px.line(plot_df, y=["Close", "Prediction"], title="Actual vs. Predicted Close Prices", labels={"value": "Close Price (USD)", "Close": "Actual"})
 
-    # if run is clicked display the nextday prediction value
+    # update layouts
+    for fig in [ts_fig, wv_fig, pred_test_fig]:
+        fig.update_layout(
+            font=dict(
+                family="Open Sans",
+                size=14),
+            title=dict(
+                x=0.5,
+                y=1,
+                xanchor='center',
+                yanchor= 'top',
+                font=dict(
+                    color="orange",
+                    size=24)),
+            legend=dict(
+                orientation="h",
+                yanchor="top",
+                y=0.9,
+                xanchor="left",
+                x=0.2),
+            legend_title_text='',
+            margin=dict(l=20, r=20, t=30, b=30),
+            # plot_bgcolor = '#DCDCDC',
+            plot_bgcolor = '#eee',
+            paper_bgcolor="#fff")
+        fig.update_xaxes(tickangle=-45)
+        
+
+    # if tomorrow's prediction button is clicked:
     if "btn-nclicks-1" == ctx.triggered_id:
         nextday_price = f"${y_nextday:.2f}"
 
-
-    return ts_fig, html.Div(nextday_price), pred_test_fig 
-
-# weekly volatility
-@app.callback(
-    Output("volatility-fig", "figure"),
-    Input("select-coin", "value")
-    )
-def update_volatility_graph(coin_selected):
-    dff = df[df["Symbols"] == coin_selected]
-    dff["Weekly_Voltaility"] = dff["Close"].pct_change().rolling(7).std()
-    wv_fig = px.area(dff, x="Date", y="Weekly_Voltaility", title="Weekly Voltaility", labels={"Date": "", "Value": "Price (USD)"})
-
-    return wv_fig
-
-# # run prediction
-# @app.callback(
-#     Output("nextday-price-prediction", "children"),
-#     # Output("pred-fig", "figure"),
-#     Input("btn-nclicks-1", "n_clicks"),
-#     Input("select-coin", "value")
-#     )
-# def update_nextday_price(runpred, coin_selected):
-#     y_nextday = ""
-#     pred_fig = {}
-#     if "btn-nclicks-1" == ctx.triggered_id:
-#         df1 = df[df["Symbols"] == coin_selected]
-#         df1.set_index("Date", inplace=True)
-#         df1 = df1[["Close"]].copy()
-#         train_end_date = train_end_dates[coin_selected]
-#         plot_df, y_nextday, coin_model = xgb_price_predictor(df1, coin_selected, train_end_date, WINDOW_SIZE)
-#         pred_fig = px.line(plot_df, y=["Close", "Prediction"], title="Actual vs Prediction")
-#     elif coin_selected != "value":
-#         y_nextday = ""
-
-#     return html.Div(y_nextday), pred_fig
-
-
-# ******************************************************
-# # predict nextday
-# @app.callback(
-#      Output("nextday-price-prediction", "children"),
-#      Input("btn-nclicks-1", "n_clicks"),
-#     )
-# def update_price(runpred, coin_selected):
-#     df1 = df[df["Symbols"] == coin_selected]
-#     df1.set_index("Date", inplace=True)
-#     df1 = df1[["Close"]].copy()
-#     test_start_date = train_start_dates[coin_selected]
-#     y_nextday_prediction = xgb_price_predictor(df1, coin_selected, test_start_date, WINDOW_SIZE)
-
-#     return y_nextday_prediction
-
-# ******************************************************
-
+    # returns
+    return ts_fig, html.Div(nextday_price), pred_test_fig, wv_fig
 
 
 #=====
 # main
 # ====
 if __name__ == '__main__':
-    app.run_server(debug=True, port=3342)
+    app.run_server(debug=True)

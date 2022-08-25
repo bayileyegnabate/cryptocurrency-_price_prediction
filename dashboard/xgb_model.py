@@ -6,12 +6,12 @@ LEARNING_RATE = 0.01
 
 # nextday price prediction function
 # =================================
-def xgb_price_predictor(data, coin_selected, training_end_date, window_size):
+def xgb_train_model(data, coin_selected, test_start_date, window_size):
     # create features
     df = create_features(data, window_size)
     
     # Training / Test split
-    X_train, y_train, X_test, y_test, test_date_index = tss(df, training_end_date)
+    X_train, y_train, X_test, y_test, test_date_index = tss(df, test_start_date)
     
     
     # train model
@@ -23,7 +23,7 @@ def xgb_price_predictor(data, coin_selected, training_end_date, window_size):
     model.fit(X_train, y_train)
     
     # save model as a JSON
-    model.save_model(f"{coin_selected}.json")
+    model.save_model(f"static/{coin_selected}.json")
 
     # make prediction on the Test set
     y_pred = model.predict(X_test)

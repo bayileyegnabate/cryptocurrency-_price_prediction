@@ -8,27 +8,33 @@
 	--bright-bg-color:  #F9676D;
 	--primary-font-color: #814FE5;
 	--light-grey:  #ACB5B9;
-	/*--primary-border-color:  background: linear-gradient(#e66465, #9198e5);*/
 }
 
 * {
 	font-family: "Open Sans", sans-serif;
 }
 
-/*header*/
-.main-header {
-	box-shadow: 0 3px 4px 2px var(--border-color);
-	/*background: linear-gradient(#814FE5, #9198e5);*/
-	/*border-bottom: 1px solid blue;*/
-}
+
 .app-title {
-	font-weight: 500;
+	font-weight: 300;
 	letter-spacing: 1px;
-	color:  var(--bright-font-color);
+	text-transform: uppercase;
 }
 .lead-text {
-	color:  var(--dark-font-color);
+	font-size: 1.2rem;
+	color:  #aaa;
 }
+.dropdown {
+	font-size: 1.3rem;
+	color: #333;
+}
+
+.inputgroup {
+	width: 45%;
+	float: left;
+	display: block;
+}
+
 
 /*model info*/
 .model-info {
@@ -51,22 +57,23 @@
 
 /*predicted price*/
 .nextday-price {
-	display:  inline-block;
-	border: 1px solid var(--border-color);
-	font-size: 1.7rem;
-	border-radius: .2rem;
+	display:  block;
+	font-size: 1.5rem;
 	color: var(--primary-font-color);
+	width: content;
 
 }
 .div1, .div2, .run-btn {
 	border: 2px solid #8151E8;
 }
 .run-btn {
-	border: linear-gradient(#814FE5, #9198e5);
+	font-size: 1.3rem;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	border: 1px solid linear-gradient(#814FE5, #9198e5);
 }
 
 .run-btn:hover {
 	background-color: #8151E8;
 	color: #fff;
-	/*border: none;*/
 }
