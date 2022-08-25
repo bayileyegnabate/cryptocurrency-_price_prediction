@@ -7,28 +7,34 @@
 	--border-color: rgba(129, 79, 209, 0.2);
 	--bright-bg-color:  #F9676D;
 	--primary-font-color: #814FE5;
+	--light-grey:  #ACB5B9;
 }
 
 * {
 	font-family: "Open Sans", sans-serif;
 }
 
-/*header*/
-.main-header {
-	/*background: var(--primary-bg-color);*/
-	/*color:  var(--bright-font-color);*/
-	/*box-shadow: 3px 3px red, -1em 0 .4em olive;*/
-	/* offset-x | offset-y | blur-radius | spread-radius | color */
-	box-shadow: 0 3px 3px 1px var(--border-color);
-}
+
 .app-title {
-	font-weight: 500;
+	font-weight: 300;
 	letter-spacing: 1px;
-	color:  var(--bright-font-color);
+	text-transform: uppercase;
 }
 .lead-text {
-	color:  var(--dark-font-color);
+	font-size: 1.2rem;
+	color:  #aaa;
 }
+.dropdown {
+	font-size: 1.3rem;
+	color: #333;
+}
+
+.inputgroup {
+	width: 45%;
+	float: left;
+	display: block;
+}
+
 
 /*model info*/
 .model-info {
@@ -46,15 +52,28 @@
 
 /*page cntainer*/
 .page-container {
-	/*background: green;*/
+
 }
 
 /*predicted price*/
 .nextday-price {
-	display:  inline-block;
-	border: 1px solid var(--border-color);
-	font-size: 1.7rem;
-	border-radius: .2rem;
+	display:  block;
+	font-size: 1.5rem;
 	color: var(--primary-font-color);
+	width: content;
 
+}
+.div1, .div2, .run-btn {
+	border: 2px solid #8151E8;
+}
+.run-btn {
+	font-size: 1.3rem;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	border: 1px solid linear-gradient(#814FE5, #9198e5);
+}
+
+.run-btn:hover {
+	background-color: #8151E8;
+	color: #fff;
 }
