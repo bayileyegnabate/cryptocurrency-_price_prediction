@@ -38,8 +38,13 @@ After the coin was split, trained, tested, scaled, and reshaped, the model was b
 <img width="402" alt="model_prediction" src="https://user-images.githubusercontent.com/100165760/186290032-02fa774c-c850-46bc-8e03-ea49f73dbf3a.png">
 
 ### XGBOOST
+The same cryptocurrency coins were utilized in the XGBoost model. Each coin was transferred to a dataframe and then trained and fitted. The image below shows the trained XGBoost visual of AVAX-Avalance-USD:
 
+<img width="699" alt="avax_predicted_xgboost" src="https://user-images.githubusercontent.com/100165760/186677632-f13a3c6b-f3e7-494a-a5f2-af62e5eec088.png">
 
+## Conclusion:
+
+After comparing the data from the two machine learning models, we chose to use the XGBoost model. XGBoost was able to improve speed, and model performance. 
 
 
 
