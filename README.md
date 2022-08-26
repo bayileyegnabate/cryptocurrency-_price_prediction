@@ -46,5 +46,11 @@ The same cryptocurrency coins were utilized in the XGBoost model. Each coin was 
 
 After comparing the data from the two machine learning models, we chose to use the XGBoost model. XGBoost was able to improve speed, and model performance. 
 
+In order to build a more robust, accurate model, in the future we should consider additional factors like, volume, the coins high and low price, circulating supply, percent change over 7 days and market cap in order to parse out factors that may have a large influence on the predicting the price tomorrow.
+
+
+Limiting Factors
+ 
+We recognize that in order for models to most accurate on a time series, we must see some type of pattern in the data. Because of this, we anticipate this model to best predict cryptocurrency with many data points, preferably many years old. Since Bitcoin is one of the oldest in this space, we have sufficient data to estimate price prediction for bitcoin, however, coins that may be newer have not produced pattern enough to give a reliable prediction.
 
 
